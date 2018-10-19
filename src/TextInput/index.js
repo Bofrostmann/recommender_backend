@@ -10,11 +10,9 @@ import Presentational from "./Presentational";
 class TextInput extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
-        console.log(this);
-
+        console.log("props", props);
         this.state = {
-            value: props.value
+            value: props.value || ''
         };
     };
 
@@ -28,6 +26,9 @@ class TextInput extends Component {
     };
 
     getValidationState = () => {
+        if (typeof this.state.value === 'undefined') {
+            return;
+        }
         const length = this.state.value.length;
         if (length > 10) return 'success';
         else if (length > 5) return 'warning';
@@ -36,6 +37,7 @@ class TextInput extends Component {
     };
 
     render() {
+        console.log("textinput", this);
         return (
             <Presentational label={this.props.label}
                             getValidationState={this.getValidationState()}
