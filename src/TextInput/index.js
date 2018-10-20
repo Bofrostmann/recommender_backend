@@ -16,6 +16,13 @@ class TextInput extends Component {
         };
     };
 
+    componentWillReceiveProps(nextProps) {
+        // You don't have to do this check first, but it can help prevent an unneeded render
+        if (nextProps.value !== this.state.value) {
+            this.setState({ value: nextProps.value});
+        }
+    }
+
     componentDidMount() {
         this.props.onChange({field: this.props.name, value: this.state.value});
     };
