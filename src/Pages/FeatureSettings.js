@@ -12,11 +12,9 @@ import WithForm from "./WithForm";
 class FeatureSettings extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            initial_key: "",
-        };
         this.mode = props.match.params.item_key === 'NEW' ? 'NEW' : 'UPDATE';
     }
+
 
     data_requester = new API();
 
@@ -31,21 +29,19 @@ class FeatureSettings extends Component {
                 fields.mode = this.mode;
                 _this.setState({fields, initial_key: fields.feature_key});
 
+                this.props.setFormSettings(this.mode, fields.feature_key, "feature");
             });
-        } else if (this.mode === 'NEW') {
-            fields.mode = this.mode;
-            this.setState(fields);
+        } else {
+            this.props.setFormSettings(this.mode, null, "feature");
         }
+
+
     }
 
 
     render() {
-        const headline = this.props.match.params.item_key === 'NEW'
-            ? "neues Feature anlegen"
-            : "Feature '" + this.state.initial_key+ "' bearbeiten";
         return (
             <div>
-                <h2>{headline}</h2>
                 <TextInput name={'feature_key'} value={this.props.fields.feature_key} label={'Key'}
                            onChange={this.props.on_field_change}/>
                 <TextInput name={'label'} value={this.props.fields.label} label={'Label'}
@@ -58,6 +54,7 @@ class FeatureSettings extends Component {
 FeatureSettings.propTypes = {
     item_key: PropTypes.string,
     on_field_change: PropTypes.func,
+    setFormSettings: PropTypes.func,
     fields: PropTypes.shape({
         feature_key: PropTypes.string,
         label: PropTypes.string,
@@ -69,4 +66,4 @@ FeatureSettings.defaultProps = {
     fields: {feature_key: '', label: '', id: -1}
 };
 
-export default WithForm(FeatureSettings, 'feature', FeatureSettings.mode);
+export default WithForm(FeatureSettings, 'feature');

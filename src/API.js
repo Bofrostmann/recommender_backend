@@ -23,18 +23,28 @@ export default class API {
             });
     };
 
-    updateData (key, data) {
-        return (axios.post(this.api_base_path + '/genericSingleUpdate', {key,data})).then(response => {
+
+    getFeaturesOfRegion(region_id) {
+        return axios.post(this.api_base_path + '/featuresOfRegion', {region_id}).then(response => {
+            return response.data;
+        });
+    }
+
+
+    updateData(key, data) {
+        console.log("hier", key);
+        return (axios.post(this.api_base_path + '/genericSingleUpdate', {key, data})).then(response => {
             return response.data.success;
         })
     }
 
-    insertData (key, data) {
-        return (axios.post(this.api_base_path + '/genericSingleCreate', {key,data})).then(response => {
+    insertData(key, data) {
+        return (axios.post(this.api_base_path + '/genericSingleCreate', {key, data})).then(response => {
             return response.data.success;
         })
     }
-    deleteData (key, id) {
+
+    deleteData(key, id) {
         return (axios.post(this.api_base_path + '/genericSingleDelete', {key, data: {id: id}})).then(response => {
             return response.data.success;
         })

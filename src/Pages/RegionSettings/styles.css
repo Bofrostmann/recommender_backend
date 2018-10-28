@@ -1,0 +1,9 @@
+.feature_rows {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.feature_rows > * {
+    flex-basis: 0;
+    flex-grow: 1;
+}

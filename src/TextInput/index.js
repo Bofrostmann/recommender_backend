@@ -10,23 +10,24 @@ import Presentational from "./Presentational";
 class TextInput extends Component {
     constructor(props) {
         super(props);
-        console.log("props", props);
         this.state = {
             value: props.value || ''
         };
     };
 
     componentWillReceiveProps(nextProps) {
-        // You don't have to do this check first, but it can help prevent an unneeded render
         if (nextProps.value !== this.state.value) {
-            this.setState({ value: nextProps.value});
+            this.setState({value: nextProps.value});
         }
     }
 
-    componentDidMount() {
-        this.props.onChange({field: this.props.name, value: this.state.value});
-    };
+    /*
+        componentDidMount() {
 
+            this.props.onChange({field: this.props.name, value: this.state.value});
+
+    };
+*/
     onInputChange = (event) => {
         this.setState({value: event.target.value});
         this.props.onChange({field: this.props.name, value: event.target.value});
@@ -44,7 +45,6 @@ class TextInput extends Component {
     };
 
     render() {
-        console.log("textinput", this);
         return (
             <Presentational label={this.props.label}
                             getValidationState={this.getValidationState()}

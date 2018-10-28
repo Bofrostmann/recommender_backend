@@ -7,7 +7,7 @@ import {Button, Modal} from "react-bootstrap";
 import API from './../API'
 import {withRouter} from "react-router-dom";
 
-function WithForm(FormContent, update_key, mode) {
+function WithForm(FormContent, item_type_key) {
     class WithForm extends Component {
         constructor(props) {
             super(props);
@@ -15,8 +15,14 @@ function WithForm(FormContent, update_key, mode) {
                 fields: {},
                 popup: ""
             };
-            this.update_key = update_key;
-        }
+            this.item_type_key = item_type_key;
+        };
+
+
+        setFormSettings = (mode, item_name, item_type_name) => {
+            this.mode = mode;
+            this.setState({item_name: item_name, item_type_name: item_type_name});
+        };
 
         onFieldChange = (event) => {
             const fields = this.state.fields;
@@ -27,42 +33,41 @@ function WithForm(FormContent, update_key, mode) {
         submitForm = (event) => {
             event.preventDefault();
             const api = new API();
-            console.log(this);
             let submit_promise;
-            if (this.state.mode === 'NEW') {
-                submit_promise = api.insertData(this.update_key, this.state.fields);
+            if (this.mode === 'NEW') {
+                submit_promise = api.insertData(this.item_type_key, this.state.fields);
             } else {
-                submit_promise = api.updateData(this.update_key, this.state.fields);
+                submit_promise = api.updateData(this.item_type_key, this.state.fields);
             }
 
             submit_promise.then(success => {
-                if (success) {
-                    let action_string;
-                    if (this.state.mode === 'NEW') {
-                        action_string = "created";
-                    } else {
-                        action_string = "updated";
-
-                    }
-                    this.createPopup("Finished!", "The element was "+ action_string + " successfully.");
+                let action_string;
+                if (this.mode === 'NEW') {
+                    action_string = "created";
                 } else {
-                    this.createPopup("Oops!", "The element could not be created");
+                    action_string = "updated";
+                }
+                if (success) {
+                    this.createPopup("Finished!", "The element was " + action_string + " successfully.");
+                } else {
+                    this.createPopup("Oops!", "The element could not be " + action_string);
 
                 }
             })
         };
 
+        setFormFields = (fields) => {
+            this.setState({fields});
+        };
+
         deleteElement = (event) => {
             const api = new API();
-            console.log("hier bin ich");
-            console.log(this);
-            if (this.state.fields.mode === 'UPDATE') {
-                api.deleteData(this.update_key, this.state.fields.id).then(success => {
+            if (this.mode === 'UPDATE') {
+                api.deleteData(this.item_type_key, this.state.fields.id).then(success => {
                     if (success) {
                         this.createPopup("Finished!", "The element was deleted successfully.");
                     } else {
                         this.createPopup("Oops!", "The element could not be deleted");
-
                     }
                 });
             }
@@ -75,7 +80,7 @@ function WithForm(FormContent, update_key, mode) {
                         type="link"
                         href="#"
                         onClick={() => {
-                            history.push('/features')
+                            history.push('/' + this.item_type_key + 's')
                         }}>
                     OK
                 </Button>));
@@ -92,20 +97,29 @@ function WithForm(FormContent, update_key, mode) {
                     </Modal.Dialog>
                 </div>)
             });
-        }
+        };
 
         render() {
+            const headline = this.mode === 'NEW'
+                ? "Create new " + this.state.item_type_name
+                : "Edit " + this.state.item_type_name + " '" + this.state.item_name + "'";
+            const delete_button = this.mode === 'UPDATE'
+                ? (<Button bsSize="large"
+                           bsStyle="danger"
+                           type="button"
+                           href="#"
+                           onClick={this.deleteElement}>
+                    Delete
+                </Button>)
+                : '';
             return (
                 <form onSubmit={this.submitForm}>
-                    <FormContent  {...this.props} on_field_change={this.onFieldChange} fields={this.state.fields}/>
+                    <h2>{headline}</h2>
+                    <FormContent  {...this.props} on_field_change={this.onFieldChange} fields={this.state.fields}
+                                  setFormSettings={this.setFormSettings}
+                                  setFormFields={this.setFormFields}/>
                     <div className={"buttons"}>
-                        <Button bsSize="large"
-                                bsStyle="danger"
-                                type="link"
-                                href="#"
-                                onClick={this.deleteElement}>
-                            Delete
-                        </Button>
+                        {delete_button}
                         <Button bsSize="large"
                                 bsStyle="primary"
                                 type="submit">

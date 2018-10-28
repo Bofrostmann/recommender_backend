@@ -5,7 +5,7 @@ import {Route, BrowserRouter, Link} from "react-router-dom";
 import LandingPage from './Pages/LandingPage';
 import DataOverview from "./Pages/DataOverview";
 import FeatureSettings from "./Pages/FeatureSettings";
-import RegionSettings from "./Pages/RegionSettings";
+import  RegionSettings from "./Pages/RegionSettings/Page";
 
 class App extends Component {
     render() {
