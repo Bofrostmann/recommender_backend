@@ -2,7 +2,7 @@
  *    Created by Florian Haimerl (florian.haimerl@tum.de)
  */
 
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from "prop-types";
 import TextInput from "../../TextInput";
 import "./styles.css"

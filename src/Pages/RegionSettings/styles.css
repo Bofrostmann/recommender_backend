@@ -6,4 +6,13 @@
 .feature_rows > * {
     flex-basis: 0;
     flex-grow: 1;
+    background-color: white;
+}
+
+.tab-content {
+    margin: 1em;
+}
+
+.airport_buttons {
+    padding: 1em;
 }

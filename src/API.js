@@ -30,6 +30,13 @@ export default class API {
         });
     }
 
+    getAirportsOfRegion(region_id) {
+        return axios.post(this.api_base_path + '/getAirportsOfRegion', {region_id}).then(response => {
+            console.log(response.data);
+            return response.data;
+        });
+    }
+
 
     updateData(key, data) {
         console.log("hier", key);

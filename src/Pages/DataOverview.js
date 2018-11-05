@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import API from "./../API";
 import InputWrapper from "../InputWrapper";
 import {Button} from "react-bootstrap";
+import {Treebeard} from 'react-treebeard';
 
 class DataOverview extends Component {
     constructor(props) {
@@ -17,6 +18,7 @@ class DataOverview extends Component {
             data: [],
             data_type_name: ''
         };
+        is_hierarchical = false;
         switch (this.props.data_type) {
             case 'feature':
                 this.key_column = 'key';
@@ -25,8 +27,9 @@ class DataOverview extends Component {
             case 'region':
                 this.key_column = 'unique_name';
                 this.name_column = 'name';
+                this.is_hierarchical = true;
             default:
-            // do nothing
+                // do nothing
         }
 
     }
