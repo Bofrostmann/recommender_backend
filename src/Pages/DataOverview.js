@@ -2,6 +2,9 @@
  *    Created by Florian Haimerl (florian.haimerl@tum.de)
  */
 
+
+import './DataOverview.css';
+
 import React, {Component} from 'react';
 import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
@@ -11,6 +14,9 @@ import InputWrapper from "../InputWrapper";
 import {Button} from "react-bootstrap";
 import {Treebeard} from 'react-treebeard';
 
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+
+
 class DataOverview extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +24,7 @@ class DataOverview extends Component {
             data: [],
             data_type_name: ''
         };
-        is_hierarchical = false;
+        this.is_hierarchical = false;
         switch (this.props.data_type) {
             case 'feature':
                 this.key_column = 'key';
@@ -29,7 +35,7 @@ class DataOverview extends Component {
                 this.name_column = 'name';
                 this.is_hierarchical = true;
             default:
-                // do nothing
+            // do nothing
         }
 
     }
@@ -40,12 +46,12 @@ class DataOverview extends Component {
         switch (this.props.data_type) {
             case 'feature':
                 this.data_requester.getAllFeatures().then(features => {
-                    this.setState({data: Object.values(features), data_type_name: 'Feature'});
+                    this.setState({data: this.preprocessData(Object.values(features)), data_type_name: 'Feature'});
                 });
                 break;
             case 'region':
                 this.data_requester.getAllRegions().then(regions => {
-                    this.setState({data: Object.values(regions), data_type_name: 'Region'});
+                    this.setState({data: this.preprocessData(Object.values(regions)), data_type_name: 'Region'});
                 });
                 break;
             default:
@@ -53,9 +59,64 @@ class DataOverview extends Component {
         }
     }
 
-    addNewItem() {
+    CreateChildrenOfElement = (id, data) => {
+        let children = [],
+            current_children;
+        data.forEach(element => {
+            if (element.parent_id === id && element.parent_id !== element.id) {
+                current_children = this.CreateChildrenOfElement(element.id, data);
+                if (current_children.length) {
+                    children.push({
+                        name: this.createLink(element, true),
+                        children: current_children
+                    });
+                } else {
+                    children.push({name: this.createLink(element)});
+                }
+            }
+        });
+        return children;
+    };
 
-    }
+    createLink = (element, use_wench) => {
+        return (
+            use_wench
+                ? (
+                    <div>
+                        <span className={"folder"}>{element[this.name_column]}</span>
+                        <Link to={'/' + this.props.data_type + 'Settings/' + element[this.key_column]}>
+                            <FontAwesomeIcon icon="wrench"/>
+                        </Link>
+                    </div>)
+                : (
+                    <Link to={'/' + this.props.data_type + 'Settings/' + element[this.key_column]}>
+                        {element[this.name_column]}
+                    </Link>)
+        );
+    };
+
+
+    preprocessData = (data) => {
+        if (data.length) {
+            if (this.is_hierarchical) {
+                return this.CreateChildrenOfElement(0, data);
+            } else {
+                return data.map(element => {
+                    return ({
+                            name: this.createLink(element)
+                        }
+                    )
+                })
+            }
+        } else return {};
+    };
+
+    onToggle = (node, toggled) => {
+        if (node.children) {
+            node.toggled = toggled;
+        }
+        this.setState({cursor: node});
+    };
 
     render() {
         const NewButton = withRouter(({history}) => (
@@ -67,31 +128,17 @@ class DataOverview extends Component {
                 Add new {this.state.data_type_name}
             </Button>
         ));
-
         return (
-            <ul>
-                {this.state.data.map(element => {
-                    return (
-                        <li key={element[this.key_column]}>
-                            <Link to={'/' + this.props.data_type + 'Settings/' + element[this.key_column]}>
-                                {element[this.name_column]}
-                            </Link>
-                        </li>
-                    );
-                })}
-                <li>
-                    <NewButton bsStyle="info"
-                               type="link"
-                               onClick={this.addNewItem}>
-                        Add new {this.state.data_type_name}
-                    </NewButton>
-                </li>
-            </ul>
+            <div className={'data_list_container'}>
+                <Treebeard data={this.state.data} onToggle={this.onToggle}/>
+                <NewButton/>
+            </div>
         );
     }
 }
 
-InputWrapper.propTypes = {
+InputWrapper
+    .propTypes = {
     data_type: PropTypes.string
 };
 

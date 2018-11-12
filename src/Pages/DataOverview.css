@@ -1,0 +1,8 @@
+.data_list_container ul{
+    background-color: transparent;
+}
+
+.data_list_container .folder {
+    color: black;
+    padding-right: 1em;
+}

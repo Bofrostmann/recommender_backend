@@ -7,17 +7,27 @@ import axios from 'axios';
 export default class API {
     constructor() {
         this.api_base_path = "http://localhost:3001/recommenderAPI";
+        this.token = localStorage.getItem('token');
+        if (this.token) {
+            this.config = {
+                headers: {
+                    Authorization: 'jwt ' + this.token
+                }
+            };
+        } else {
+            this.config = {}
+        }
     }
 
     getAllFeatures() {
-        return axios.get(this.api_base_path + '/features')
+        return axios.get(this.api_base_path + '/allFeatureData', this.config)
             .then(response => {
                 return response.data;
             });
     };
 
     getAllRegions() {
-        return axios.get(this.api_base_path + '/regions')
+        return axios.get(this.api_base_path + '/regions', this.config)
             .then(response => {
                 return response.data;
             });
@@ -25,13 +35,13 @@ export default class API {
 
 
     getFeaturesOfRegion(region_id) {
-        return axios.post(this.api_base_path + '/featuresOfRegion', {region_id}).then(response => {
+        return axios.post(this.api_base_path + '/featuresOfRegion', {region_id}, this.config).then(response => {
             return response.data;
         });
     }
 
     getAirportsOfRegion(region_id) {
-        return axios.post(this.api_base_path + '/getAirportsOfRegion', {region_id}).then(response => {
+        return axios.post(this.api_base_path + '/getAirportsOfRegion', {region_id}, this.config).then(response => {
             console.log(response.data);
             return response.data;
         });
@@ -40,21 +50,45 @@ export default class API {
 
     updateData(key, data) {
         console.log("hier", key);
-        return (axios.post(this.api_base_path + '/genericSingleUpdate', {key, data})).then(response => {
+        return axios.post(this.api_base_path + '/genericSingleUpdate', {key, data}, this.config).then(response => {
             return response.data.success;
         })
     }
 
     insertData(key, data) {
-        return (axios.post(this.api_base_path + '/genericSingleCreate', {key, data})).then(response => {
+        return axios.post(this.api_base_path + '/genericSingleCreate', {key, data}, this.config).then(response => {
             return response.data.success;
         })
     }
 
     deleteData(key, id) {
-        return (axios.post(this.api_base_path + '/genericSingleDelete', {key, data: {id: id}})).then(response => {
+        return (axios.post(this.api_base_path + '/genericSingleDelete', {
+            key,
+            data: {id: id}
+        }, this.config)).then(response => {
             return response.data.success;
         })
+    }
+
+    login(password) {
+        return (axios.post(this.api_base_path + '/login', {password}))
+            .then(response => {
+                window.localStorage.setItem('token', response.data.token);
+                return true;
+            })
+            .catch(function (error) {
+                return false;
+            });
+    }
+
+    validateLogin() {
+        return axios.post(this.api_base_path + '/validateLogin', {}, this.config)
+            .then(response => {
+                return response.data;
+            })
+            .catch((err) => {
+                localStorage.removeItem('token');
+            });
     }
 }
 

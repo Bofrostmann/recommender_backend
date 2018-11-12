@@ -26,8 +26,13 @@ function WithForm(FormContent, item_type_key) {
 
         onFieldChange = (event) => {
             const fields = this.state.fields;
-            fields[event.field] = event.value;
+            if (typeof event.value.value !== 'undefined') {
+                fields[event.field] = event.value.value;
+            } else {
+                fields[event.field] = event.value;
+            }
             this.setState(fields);
+            console.log(fields[event.field]);
         };
 
         submitForm = (event) => {

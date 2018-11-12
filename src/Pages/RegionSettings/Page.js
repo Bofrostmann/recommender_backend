@@ -12,12 +12,15 @@ import "./../general.css"
 import FeatureContainer from "./FeatureContainer"
 import {Tabs, Tab, Button, ButtonGroup} from "react-bootstrap";
 import AirportContainer from "./AirportContainer";
+import InputWrapper from "../../InputWrapper";
+import SelectInput from "../../SelectInput";
 
 class RegionSettings extends Component {
     constructor(props) {
         super(props);
         this.state = {
             features: [],
+            regions: []
         };
         this.mode = props.match.params.item_key === 'NEW' ? 'NEW' : 'UPDATE';
     }
@@ -26,13 +29,15 @@ class RegionSettings extends Component {
 
     componentDidMount() {
         let fields = this.props.fields;
-        if (this.mode === 'UPDATE') {
-            const _this = this;
-            this.data_requester.getAllRegions().then(region => {
-                fields.name = region[_this.props.match.params.item_key].name;
-                fields.cost_per_day = region[_this.props.match.params.item_key].cost_per_day;
-                fields.id = region[_this.props.match.params.item_key].id;
-                fields.unique_name = region[_this.props.match.params.item_key].unique_name;
+        fields.number_of_airports = 1;
+        this.data_requester.getAllRegions().then(regions => {
+            if (this.mode === 'UPDATE') {
+                const _this = this;
+                fields.name = regions[_this.props.match.params.item_key].name;
+                fields.cost_per_day = regions[_this.props.match.params.item_key].cost_per_day;
+                fields.id = regions[_this.props.match.params.item_key].id;
+                fields.unique_name = regions[_this.props.match.params.item_key].unique_name;
+                fields.parent_id = regions[_this.props.match.params.item_key].parent_id;
 
                 this.data_requester.getFeaturesOfRegion(fields.id).then(feature_values => {
                     this.data_requester.getAllFeatures().then(features => {
@@ -42,7 +47,7 @@ class RegionSettings extends Component {
                             fields[feature.key + "$autumn"] = feature.quality_autumn;
                             fields[feature.key + "$winter"] = feature.quality_winter;
                         });
-                        this.setState({features: Object.values(features)});
+                        this.setState({features: Object.values(features), regions: Object.values(regions)});
                         this.props.setFormFields(fields);
                     });
                 });
@@ -54,27 +59,25 @@ class RegionSettings extends Component {
                             fields['airport_city$' + i] = airport.city;
                             fields['airport_iata_code$' + i] = airport.iata_code;
                         });
-                    } else {
-                        fields.number_of_airports = 1;
                     }
                     this.props.setFormFields(fields);
                 });
 
                 this.props.setFormSettings(this.mode, fields.unique_name, "region");
-            });
-        } else {
-            this.data_requester.getAllFeatures().then(features => {
-                this.setState({features: Object.values(features)});
-            });
-            this.props.setFormSettings(this.mode, null, "region");
-        }
+            } else {
+                this.data_requester.getAllFeatures().then(features => {
+                    this.setState({features: Object.values(features), regions: Object.values(regions)});
+                });
+                this.props.setFormSettings(this.mode, null, "region");
+            }
+        });
     }
 
     addAirport = () => {
-        this.props.on_field_change({field: 'number_of_airports', value: this.state.number_of_airports + 1});
+        this.props.on_field_change({field: 'number_of_airports', value: this.props.fields.number_of_airports + 1});
     };
     removeAirport = () => {
-        this.props.on_field_change({field: 'number_of_airports', value: this.state.number_of_airports - 1});
+        this.props.on_field_change({field: 'number_of_airports', value: this.props.fields.number_of_airports - 1});
     };
 
     createAirportFields = () => {
@@ -91,6 +94,14 @@ class RegionSettings extends Component {
         return airport_fields;
     };
 
+    getRegionOptions = () => {
+        if (this.state.regions.length) {
+            return this.state.regions.map(region => ({value: region.id, label: region.name}));
+        } else {
+            return [];
+        }
+    };
+
 
     render() {
         return (
@@ -105,6 +116,10 @@ class RegionSettings extends Component {
                     <div className={"col"}>
                         <TextInput name={'cost_per_day'} value={this.props.fields.cost_per_day} label={'Cost per day'}
                                    onChange={this.props.on_field_change} type={"number"}/>
+                        <InputWrapper label={"Parent region"}>
+                            <SelectInput name={"parent_id"} onChange={this.props.on_field_change}
+                                         value={this.props.fields.parent_id} options={this.getRegionOptions()}/>
+                        </InputWrapper>
                     </div>
                 </div>
                 <Tabs defaultActiveKey={1}>

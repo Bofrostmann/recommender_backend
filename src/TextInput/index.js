@@ -10,34 +10,17 @@ import Presentational from "./Presentational";
 class TextInput extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            value: props.value || ''
-        };
     };
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.value !== this.state.value) {
-            this.setState({value: nextProps.value});
-        }
-    }
-
-    /*
-        componentDidMount() {
-
-            this.props.onChange({field: this.props.name, value: this.state.value});
-
-    };
-*/
     onInputChange = (event) => {
-        this.setState({value: event.target.value});
         this.props.onChange({field: this.props.name, value: event.target.value});
     };
 
     getValidationState = () => {
-        if (typeof this.state.value === 'undefined') {
+        if (typeof this.props.value === 'undefined') {
             return;
         }
-        const length = this.state.value.length;
+        const length = this.props.value.length;
         if (length > 10) return 'success';
         else if (length > 5) return 'warning';
         else if (length > 0) return 'error';
@@ -48,7 +31,7 @@ class TextInput extends Component {
         return (
             <Presentational label={this.props.label}
                             getValidationState={this.getValidationState()}
-                            value={this.state.value}
+                            value={this.props.value}
                             onChange={this.onInputChange}
                             type={this.props.type}/>
         );
