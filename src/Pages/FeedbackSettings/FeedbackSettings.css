@@ -1,0 +1,16 @@
+.question_container {
+    display: flex;
+}
+
+.question_container .question {
+    flex-grow: 1;
+}
+
+.question_container .is_active {
+    display: flex;
+    flex-direction: column;
+}
+
+.question_container button {
+    margin: 1em 2em 2em;
+}

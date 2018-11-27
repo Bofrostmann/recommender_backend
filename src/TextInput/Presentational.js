@@ -9,8 +9,8 @@ import InputWrapper from "../InputWrapper/index";
 import PropTypes from "prop-types";
 
 
-const Presentational = ({label, onChange, value, getValidationState, type}) => (
-    <InputWrapper label={label} getValidationState={getValidationState}>
+const Presentational = ({label, onChange, value, getValidationState, type, className}) => (
+    <InputWrapper label={label} getValidationState={getValidationState} className={className}>
         <FormControl
             type={type}
             value={value}
@@ -24,7 +24,8 @@ Presentational.propTypes = {
     value: PropTypes.string,
     type: PropTypes.string,
     onChange: PropTypes.func,
-    getValidationState: PropTypes.string
+    getValidationState: PropTypes.string,
+    className: PropTypes.string
 };
 
 export default Presentational;

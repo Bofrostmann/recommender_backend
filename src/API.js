@@ -90,5 +90,11 @@ export default class API {
                 localStorage.removeItem('token');
             });
     }
+
+    getAllFeedbackQuestions() {
+        return axios.get(this.api_base_path + '/getFeedbackQuestions').then(response => {
+            return response.data;
+        });
+    }
 }
 

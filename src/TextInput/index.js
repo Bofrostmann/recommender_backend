@@ -33,7 +33,8 @@ class TextInput extends Component {
                             getValidationState={this.getValidationState()}
                             value={this.props.value}
                             onChange={this.onInputChange}
-                            type={this.props.type}/>
+                            type={this.props.type}
+                            className={this.props.className}/>
         );
     }
 }
@@ -43,7 +44,8 @@ TextInput.propTypes = {
     name: PropTypes.string,
     type: PropTypes.string,
     onChange: PropTypes.func,
-    value: PropTypes.string
+    value: PropTypes.string,
+    className: PropTypes.string
 };
 
 TextInput.defaultProps = {};

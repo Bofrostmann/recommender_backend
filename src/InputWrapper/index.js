@@ -13,7 +13,7 @@ class InputWrapper extends Component {
     render() {
         return (
             <FormGroup
-                className={"input_wrapper"}
+                className={"input_wrapper " + this.props.className}
                 controlId="formBasicText"
                 validationState={this.props.getValidationState ? this.props.getValidationState : null}>
                 <ControlLabel>{this.props.label}</ControlLabel>
@@ -27,7 +27,8 @@ class InputWrapper extends Component {
 InputWrapper.propTypes = {
     label: PropTypes.string,
     getValidationState: PropTypes.string,
-    children: PropTypes.object
+    children: PropTypes.object,
+    className: PropTypes.string
 };
 
 export default InputWrapper;

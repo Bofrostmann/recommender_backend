@@ -23,9 +23,10 @@ class RegionSettings extends Component {
             regions: []
         };
         this.mode = props.match.params.item_key === 'NEW' ? 'NEW' : 'UPDATE';
+        this.data_requester = new API();
     }
 
-    data_requester = new API();
+
 
     componentDidMount() {
         let fields = this.props.fields;
@@ -38,6 +39,11 @@ class RegionSettings extends Component {
                 fields.id = regions[_this.props.match.params.item_key].id;
                 fields.unique_name = regions[_this.props.match.params.item_key].unique_name;
                 fields.parent_id = regions[_this.props.match.params.item_key].parent_id;
+                if (regions[_this.props.match.params.item_key].max_zoom_level !== null) {
+                    fields.max_zoom_level = regions[_this.props.match.params.item_key].max_zoom_level;
+                } else {
+                    fields.max_zoom_level = 0;
+                }
 
                 this.data_requester.getFeaturesOfRegion(fields.id).then(feature_values => {
                     this.data_requester.getAllFeatures().then(features => {
@@ -120,6 +126,8 @@ class RegionSettings extends Component {
                             <SelectInput name={"parent_id"} onChange={this.props.on_field_change}
                                          value={this.props.fields.parent_id} options={this.getRegionOptions()}/>
                         </InputWrapper>
+                        <TextInput name={'max_zoom_level'} value={this.props.fields.max_zoom_level} label={'Maximum zoom level'}
+                                   onChange={this.props.on_field_change} type={"number"}/>
                     </div>
                 </div>
                 <Tabs defaultActiveKey={1}>

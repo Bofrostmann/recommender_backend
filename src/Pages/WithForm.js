@@ -62,6 +62,7 @@ function WithForm(FormContent, item_type_key) {
         };
 
         setFormFields = (fields) => {
+            console.log("fields",fields);
             this.setState({fields});
         };
 

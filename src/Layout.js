@@ -10,6 +10,7 @@ import {Button} from "react-bootstrap";
 import LandingPage from "./Pages/LandingPage";
 import DataOverview from "./Pages/DataOverview";
 import FeatureSettings from "./Pages/FeatureSettings";
+import FeedbackSettings from "./Pages/FeedbackSettings/index";
 import RegionSettings from "./Pages/RegionSettings/Page";
 import {AuthenticationConsumer} from "./AuthenticationContext";
 
@@ -46,7 +47,8 @@ class Layout extends Component {
                                         <li><Link to='/'>Home</Link></li>
                                         {is_authenticated
                                             ? [(<li><Link to='/features'>Features</Link></li>),
-                                                (<li>< Link to='/regions'>Regions</Link></li>)]
+                                                (<li>< Link to='/regions'>Regions</Link></li>),
+                                                (<li>< Link to='/feedbackSettings'>Feedback</Link></li>)]
                                             : []
                                         }
                                     </ul>
@@ -58,6 +60,7 @@ class Layout extends Component {
                                     <Route path={'/featureSettings/:item_key'} exact component={FeatureSettings}/>
                                     <Route path={'/regions'} exact render={() => <DataOverview data_type={'region'}/>}/>
                                     <Route path={'/regionSettings/:item_key'} exact component={RegionSettings}/>
+                                    <Route path={'/feedbackSettings'} exact component={FeedbackSettings}/>
                                 </div>
                             </div>
                         </div>
