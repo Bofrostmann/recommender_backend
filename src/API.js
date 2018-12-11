@@ -4,9 +4,11 @@
 
 import axios from 'axios';
 
+import CONSTANTS from './CONSTANTS';
+
 export default class API {
     constructor() {
-        this.api_base_path = "http://localhost:3001/recommenderAPI";
+        this.api_base_path = CONSTANTS.API_URL;
         this.token = localStorage.getItem('token');
         if (this.token) {
             this.config = {
