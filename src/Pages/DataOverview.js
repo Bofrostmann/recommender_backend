@@ -34,6 +34,12 @@ class DataOverview extends Component {
                 this.key_column = 'unique_name';
                 this.name_column = 'name';
                 this.is_hierarchical = true;
+                break;
+            case 'algorithm':
+                this.key_column = 'key';
+                this.name_column = 'name';
+                this.is_hierarchical = false;
+                break;
             default:
             // do nothing
         }
@@ -45,13 +51,18 @@ class DataOverview extends Component {
     componentDidMount() {
         switch (this.props.data_type) {
             case 'feature':
-                this.data_requester.getAllFeatures().then(features => {
+                this.data_requester.getAllActivites().then(features => {
                     this.setState({data: this.preprocessData(Object.values(features)), data_type_name: 'Feature'});
                 });
                 break;
             case 'region':
                 this.data_requester.getAllRegions().then(regions => {
                     this.setState({data: this.preprocessData(Object.values(regions)), data_type_name: 'Region'});
+                });
+                break;
+            case 'algorithm':
+                this.data_requester.getAllAlgorithms().then(algorithms => {
+                    this.setState({data: this.preprocessData(Object.values(algorithms)), data_type_name: 'Algorithm'});
                 });
                 break;
             default:
@@ -79,18 +90,20 @@ class DataOverview extends Component {
     };
 
     createLink = (element, use_wench) => {
+        const name = [element[this.name_column], ' ',
+            <span className="key_col" key={element[this.key_column]}>[{element[this.key_column]}]</span>];
         return (
             use_wench
                 ? (
                     <div>
-                        <span className={"folder"}>{element[this.name_column]}</span>
+                        <span className={"folder"}>{name}</span>
                         <Link to={'/' + this.props.data_type + 'Settings/' + element[this.key_column]}>
                             <FontAwesomeIcon icon="wrench"/>
                         </Link>
                     </div>)
                 : (
                     <Link to={'/' + this.props.data_type + 'Settings/' + element[this.key_column]}>
-                        {element[this.name_column]}
+                        {name}
                     </Link>)
         );
     };
@@ -131,7 +144,9 @@ class DataOverview extends Component {
         return (
             <div className={'data_list_container'}>
                 <Treebeard data={this.state.data} onToggle={this.onToggle}/>
-                <NewButton/>
+                <div className={"buttons"}>
+                    <NewButton/>
+                </div>
             </div>
         );
     }

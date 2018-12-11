@@ -1,12 +1,17 @@
-.feature_rows {
+.activity_rows,
+.time_of_travel_qualities {
     display: flex;
     flex-wrap: wrap;
 }
 
-.feature_rows > * {
+.activity_rows > * {
     flex-basis: 0;
     flex-grow: 1;
     background-color: white;
+}
+
+.time_of_travel_qualities > * {
+    max-width: 13em;
 }
 
 .tab-content {

@@ -13,3 +13,22 @@
     margin: 1em;
     box-shadow: -5px 5px 20px 0 rgba(0,0,0,0.5);
 }
+
+.border_box_block {
+    border: 1px solid gray;
+    padding: 1em;
+    position: relative;
+    border-radius: 1em;
+}
+
+.border_box_block > .block_header {
+    position: absolute;
+    top: -0.7em;
+    left: 1em;
+    background-color: inherit;
+    padding: 0 0.5em;
+}
+
+.buttons {
+    margin-top: 2em;
+}

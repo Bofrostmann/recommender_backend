@@ -9,7 +9,7 @@ import API from './../API'
 import TextInput from "../TextInput";
 import WithForm from "./WithForm";
 
-class FeatureSettings extends Component {
+class ActivitySettings extends Component {
     constructor(props) {
         super(props);
         this.mode = props.match.params.item_key === 'NEW' ? 'NEW' : 'UPDATE';
@@ -22,7 +22,7 @@ class FeatureSettings extends Component {
         const fields = this.props.fields;
         if (this.mode === 'UPDATE') {
             const _this = this;
-            this.data_requester.getAllFeatures().then(features => {
+            this.data_requester.getAllActivites().then(features => {
                 fields.feature_key = features[_this.props.match.params.item_key].key;
                 fields.label = features[_this.props.match.params.item_key].label;
                 fields.id = features[_this.props.match.params.item_key].id;
@@ -51,7 +51,7 @@ class FeatureSettings extends Component {
     }
 }
 
-FeatureSettings.propTypes = {
+ActivitySettings.propTypes = {
     item_key: PropTypes.string,
     on_field_change: PropTypes.func,
     setFormSettings: PropTypes.func,
@@ -62,8 +62,8 @@ FeatureSettings.propTypes = {
     })
 };
 
-FeatureSettings.defaultProps = {
+ActivitySettings.defaultProps = {
     fields: {feature_key: '', label: '', id: -1}
 };
 
-export default WithForm(FeatureSettings, 'feature');
+export default WithForm(ActivitySettings, 'feature');

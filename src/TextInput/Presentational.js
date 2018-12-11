@@ -21,7 +21,10 @@ const Presentational = ({label, onChange, value, getValidationState, type, class
 
 Presentational.propTypes = {
     label: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
     type: PropTypes.string,
     onChange: PropTypes.func,
     getValidationState: PropTypes.string,

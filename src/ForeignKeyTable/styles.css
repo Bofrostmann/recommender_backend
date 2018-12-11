@@ -1,0 +1,7 @@
+.object_container {
+    display: flex;
+}
+
+.object_container button {
+    margin: 1em 2em 2em;
+}

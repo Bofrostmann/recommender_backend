@@ -19,7 +19,7 @@ export default class API {
         }
     }
 
-    getAllFeatures() {
+    getAllActivites() {
         return axios.get(this.api_base_path + '/allFeatureData', this.config)
             .then(response => {
                 return response.data;
@@ -33,6 +33,21 @@ export default class API {
             });
     };
 
+    getAllAlgorithms() {
+        return axios.get(this.api_base_path + '/algorithms', this.config)
+            .then(response => {
+                return response.data;
+            });
+    };
+
+    getVariablesOfAlgorithm(algorithm_id) {
+        console.log("id", algorithm_id);
+        return axios.post(this.api_base_path + '/getVariablesOfAlgorithm', {algorithm_id}, this.config)
+            .then(response => {
+                console.log("response", response);
+                return response.data;
+            });
+    }
 
     getFeaturesOfRegion(region_id) {
         return axios.post(this.api_base_path + '/featuresOfRegion', {region_id}, this.config).then(response => {
@@ -42,14 +57,19 @@ export default class API {
 
     getAirportsOfRegion(region_id) {
         return axios.post(this.api_base_path + '/getAirportsOfRegion', {region_id}, this.config).then(response => {
-            console.log(response.data);
             return response.data;
         });
     }
 
+    getTimeOfTravelQualitiesOfRegion(region_id) {
+        return axios.post(this.api_base_path + '/getTimeOfTravelQualitiesOfRegion', {region_id}, this.config)
+            .then(response => {
+                return response.data;
+            });
+    }
+
 
     updateData(key, data) {
-        console.log("hier", key);
         return axios.post(this.api_base_path + '/genericSingleUpdate', {key, data}, this.config).then(response => {
             return response.data.success;
         })

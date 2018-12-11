@@ -13,7 +13,7 @@ function WithForm(FormContent, item_type_key) {
             super(props);
             this.state = {
                 fields: {},
-                popup: ""
+                popup: []
             };
             this.item_type_key = item_type_key;
         };
@@ -26,6 +26,7 @@ function WithForm(FormContent, item_type_key) {
 
         onFieldChange = (event) => {
             const fields = this.state.fields;
+            console.log("davor", fields[event.field]);
             if (typeof event.value.value !== 'undefined') {
                 fields[event.field] = event.value.value;
             } else {
@@ -53,7 +54,7 @@ function WithForm(FormContent, item_type_key) {
                     action_string = "updated";
                 }
                 if (success) {
-                    this.createPopup("Finished!", "The element was " + action_string + " successfully.");
+                    this.createPopup("Finished!", "The element was " + action_string + " successfully.", success);
                 } else {
                     this.createPopup("Oops!", "The element could not be " + action_string);
 
@@ -62,7 +63,7 @@ function WithForm(FormContent, item_type_key) {
         };
 
         setFormFields = (fields) => {
-            console.log("fields",fields);
+            console.log("fields", fields);
             this.setState({fields});
         };
 
@@ -71,7 +72,7 @@ function WithForm(FormContent, item_type_key) {
             if (this.mode === 'UPDATE') {
                 api.deleteData(this.item_type_key, this.state.fields.id).then(success => {
                     if (success) {
-                        this.createPopup("Finished!", "The element was deleted successfully.");
+                        this.createPopup("Finished!", "The element was deleted successfully.", success);
                     } else {
                         this.createPopup("Oops!", "The element could not be deleted");
                     }
@@ -79,15 +80,21 @@ function WithForm(FormContent, item_type_key) {
             }
         };
 
-        createPopup = (title, text) => {
+        createPopup = (title, text, success) => {
+            console.log("push", '/' + this.item_type_key + 's');
             const OkButton = withRouter(({history}) => (
                 <Button bsSize="large"
                         bsStyle="primary"
-                        type="link"
+                        type="reset"
                         href="#"
-                        onClick={() => {
-                            history.push('/' + this.item_type_key + 's')
-                        }}>
+                        onClick={success
+                            ? () => {
+                                console.log("push2", this.item_type_key);
+                                history.push('/' + this.item_type_key + 's');
+                            }
+                            : () => {
+                                this.setState({popup: []})
+                            }}>
                     OK
                 </Button>));
             this.setState({

@@ -11,9 +11,10 @@ import "./InputWrapper.css"
 
 class InputWrapper extends Component {
     render() {
+        const additional_class = typeof this.props.className === 'undefined' ? "": this.props.className;
         return (
             <FormGroup
-                className={"input_wrapper " + this.props.className}
+                className={"input_wrapper " + additional_class}
                 controlId="formBasicText"
                 validationState={this.props.getValidationState ? this.props.getValidationState : null}>
                 <ControlLabel>{this.props.label}</ControlLabel>

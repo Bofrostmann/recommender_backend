@@ -6,3 +6,7 @@
     color: black;
     padding-right: 1em;
 }
+
+.data_list_container .key_col{
+    color: #ffbb00;
+}

@@ -9,10 +9,11 @@ import {BrowserRouter, Link, Route} from "react-router-dom";
 import {Button} from "react-bootstrap";
 import LandingPage from "./Pages/LandingPage";
 import DataOverview from "./Pages/DataOverview";
-import FeatureSettings from "./Pages/FeatureSettings";
+import FeatureSettings from "./Pages/ActivitySettings";
 import FeedbackSettings from "./Pages/FeedbackSettings/index";
 import RegionSettings from "./Pages/RegionSettings/Page";
 import {AuthenticationConsumer} from "./AuthenticationContext";
+import AlgorithmSettings from "./Pages/AlgorithmSettings/index";
 
 class Layout extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class Layout extends Component {
         return (
             <AuthenticationConsumer>
                 {({is_authenticated, login, logout}) => (
-                    <BrowserRouter>
+                    <BrowserRouter basename={"/backend"}>
                         <div>
                             {console.log("render", this)}
                             <div className={"header"}>
@@ -46,9 +47,10 @@ class Layout extends Component {
                                     <ul>
                                         <li><Link to='/'>Home</Link></li>
                                         {is_authenticated
-                                            ? [(<li><Link to='/features'>Features</Link></li>),
-                                                (<li>< Link to='/regions'>Regions</Link></li>),
-                                                (<li>< Link to='/feedbackSettings'>Feedback</Link></li>)]
+                                            ? [(<li key={"features"}><Link to='/features'>Features</Link></li>),
+                                                (<li key={"regions"}>< Link to='/regions'>Regions</Link></li>),
+                                                (<li key={"algorithms"}>< Link to='/algorithms'>Recommenders</Link></li>),
+                                                (<li key={"feedbackSettings"}>< Link to='/feedbackSettings'>Feedback</Link></li>)]
                                             : []
                                         }
                                     </ul>
@@ -60,6 +62,8 @@ class Layout extends Component {
                                     <Route path={'/featureSettings/:item_key'} exact component={FeatureSettings}/>
                                     <Route path={'/regions'} exact render={() => <DataOverview data_type={'region'}/>}/>
                                     <Route path={'/regionSettings/:item_key'} exact component={RegionSettings}/>
+                                    <Route path={'/algorithms'} exact render={() => <DataOverview data_type={'algorithm'}/>}/>
+                                    <Route path={'/algorithmSettings/:item_key'} exact component={AlgorithmSettings}/>
                                     <Route path={'/feedbackSettings'} exact component={FeedbackSettings}/>
                                 </div>
                             </div>

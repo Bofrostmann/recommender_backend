@@ -8,29 +8,14 @@ import Presentational from "./Presentational";
 
 
 class TextInput extends Component {
-    constructor(props) {
-        super(props);
-    };
-
     onInputChange = (event) => {
         this.props.onChange({field: this.props.name, value: event.target.value});
-    };
-
-    getValidationState = () => {
-        if (typeof this.props.value === 'undefined') {
-            return;
-        }
-        const length = this.props.value.length;
-        if (length > 10) return 'success';
-        else if (length > 5) return 'warning';
-        else if (length > 0) return 'error';
-        return null;
     };
 
     render() {
         return (
             <Presentational label={this.props.label}
-                            getValidationState={this.getValidationState()}
+                            getValidationState={""}
                             value={this.props.value}
                             onChange={this.onInputChange}
                             type={this.props.type}
@@ -44,7 +29,10 @@ TextInput.propTypes = {
     name: PropTypes.string,
     type: PropTypes.string,
     onChange: PropTypes.func,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
     className: PropTypes.string
 };
 

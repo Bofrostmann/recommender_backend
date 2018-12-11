@@ -1,0 +1,12 @@
+.border_box_block {
+    background-color: white;
+    margin-top: 2em;
+}
+
+.algorithm_settings .basic_data {
+    display: flex;
+}
+
+.algorithm_settings .basic_data > * {
+    flex-grow: 1;
+}
