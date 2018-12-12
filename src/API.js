@@ -43,10 +43,8 @@ export default class API {
     };
 
     getVariablesOfAlgorithm(algorithm_id) {
-        console.log("id", algorithm_id);
         return axios.post(this.api_base_path + '/getVariablesOfAlgorithm', {algorithm_id}, this.config)
             .then(response => {
-                console.log("response", response);
                 return response.data;
             });
     }

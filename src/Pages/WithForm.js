@@ -26,14 +26,12 @@ function WithForm(FormContent, item_type_key) {
 
         onFieldChange = (event) => {
             const fields = this.state.fields;
-            console.log("davor", fields[event.field]);
             if (typeof event.value.value !== 'undefined') {
                 fields[event.field] = event.value.value;
             } else {
                 fields[event.field] = event.value;
             }
             this.setState(fields);
-            console.log(fields[event.field]);
         };
 
         submitForm = (event) => {
@@ -63,7 +61,6 @@ function WithForm(FormContent, item_type_key) {
         };
 
         setFormFields = (fields) => {
-            console.log("fields", fields);
             this.setState({fields});
         };
 
@@ -81,7 +78,6 @@ function WithForm(FormContent, item_type_key) {
         };
 
         createPopup = (title, text, success) => {
-            console.log("push", '/' + this.item_type_key + 's');
             const OkButton = withRouter(({history}) => (
                 <Button bsSize="large"
                         bsStyle="primary"
@@ -89,7 +85,6 @@ function WithForm(FormContent, item_type_key) {
                         href="#"
                         onClick={success
                             ? () => {
-                                console.log("push2", this.item_type_key);
                                 history.push('/' + this.item_type_key + 's');
                             }
                             : () => {

@@ -21,12 +21,6 @@ class LandingPage extends Component {
 
     onFieldChange = (event) => {
         this.setState({[event.field]: event.value});
-        console.log(this.state);
-        console.log(this.context);
-    };
-
-    componentDidUpdate = () => {
-        console.log("blub", this.context);
     };
 
     submitForm = (event, login_function) => {
@@ -70,7 +64,6 @@ class LandingPage extends Component {
     };
 
     render() {
-        console.log(this.context);
         return (
             <AuthenticationConsumer>
                 {({is_authenticated, login}) => (
