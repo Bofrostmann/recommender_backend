@@ -24,6 +24,14 @@ class DataOverview extends Component {
             data: [],
             data_type_name: ''
         };
+
+        const opened_elements = localStorage.getItem('opened_elements');
+        if (opened_elements === null || opened_elements === '') {
+            this.state.opened_elements = [];
+        } else {
+            this.state.opened_elements = JSON.parse(opened_elements);
+        }
+
         this.is_hierarchical = false;
         switch (this.props.data_type) {
             case 'feature':
@@ -44,6 +52,27 @@ class DataOverview extends Component {
             // do nothing
         }
 
+    }
+
+    findToggledRegionsOfNode = (node) => {
+        let result = [];
+        if (node.toggled) {
+            result.push(node.id);
+            node.children.forEach(child => {
+                result = result.concat(this.findToggledRegionsOfNode(child));
+            });
+        }
+        return result;
+    };
+
+    componentWillUnmount() {
+        let toggled_regions = [];
+        this.state.data.forEach(root_region => {
+            toggled_regions = toggled_regions.concat(this.findToggledRegionsOfNode(root_region));
+        });
+        if (this.is_hierarchical) {
+            localStorage.setItem('opened_elements', JSON.stringify(toggled_regions));
+        }
     }
 
     data_requester = new API();
@@ -72,17 +101,21 @@ class DataOverview extends Component {
 
     CreateChildrenOfElement = (id, data) => {
         let children = [],
-            current_children;
+            current_children,
+            is_toggled = false;
         data.forEach(element => {
             if (element.parent_id === id && element.parent_id !== element.id) {
                 current_children = this.CreateChildrenOfElement(element.id, data);
+                is_toggled = this.state.opened_elements.includes(element.unique_name);
                 if (current_children.length) {
                     children.push({
                         name: this.createLink(element, true),
-                        children: current_children
+                        children: current_children,
+                        id: element.unique_name,
+                        toggled: is_toggled
                     });
                 } else {
-                    children.push({name: this.createLink(element)});
+                    children.push({name: this.createLink(element), id: element.unique_name, toggled: is_toggled});
                 }
             }
         });
