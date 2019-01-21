@@ -9,11 +9,12 @@ import {BrowserRouter, Link, Route} from "react-router-dom";
 import {Button} from "react-bootstrap";
 import LandingPage from "./Pages/LandingPage";
 import DataOverview from "./Pages/DataOverview";
-import FeatureSettings from "./Pages/ActivitySettings";
+import ActivitySettings from "./Pages/ActivitySettings";
 import FeedbackSettings from "./Pages/FeedbackSettings/index";
 import RegionSettings from "./Pages/RegionSettings/Page";
 import {AuthenticationConsumer} from "./AuthenticationContext";
 import AlgorithmSettings from "./Pages/AlgorithmSettings/index";
+import GeneralSettings from "./Pages/GeneralSettings"
 
 class Layout extends Component {
     constructor(props) {
@@ -47,7 +48,8 @@ class Layout extends Component {
                                     <ul>
                                         <li><Link to='/'>Home</Link></li>
                                         {is_authenticated
-                                            ? [(<li key={"features"}><Link to='/features'>Features</Link></li>),
+                                            ? [(<li key={"generalSettings"}>< Link to='/generalSettings'>Settings</Link></li>),
+                                                (<li key={"activities"}><Link to='/activities'>Activities</Link></li>),
                                                 (<li key={"regions"}>< Link to='/regions'>Regions</Link></li>),
                                                 (<li key={"algorithms"}>< Link to='/algorithms'>Recommenders</Link></li>),
                                                 (<li key={"feedbackSettings"}>< Link to='/feedbackSettings'>Feedback</Link></li>)]
@@ -57,14 +59,15 @@ class Layout extends Component {
                                 </div>
                                 <div className={"main"}>
                                     <Route path={'/'} exact component={LandingPage}/>
-                                    <Route path={'/features'} exact
-                                           render={() => <DataOverview data_type={'feature'}/>}/>
-                                    <Route path={'/featureSettings/:item_key'} exact component={FeatureSettings}/>
+                                    <Route path={'/activities'} exact
+                                           render={() => <DataOverview data_type={'activity'}/>}/>
+                                    <Route path={'/activitySettings/:item_key'} exact component={ActivitySettings}/>
                                     <Route path={'/regions'} exact render={() => <DataOverview data_type={'region'}/>}/>
                                     <Route path={'/regionSettings/:item_key'} exact component={RegionSettings}/>
                                     <Route path={'/algorithms'} exact render={() => <DataOverview data_type={'algorithm'}/>}/>
                                     <Route path={'/algorithmSettings/:item_key'} exact component={AlgorithmSettings}/>
                                     <Route path={'/feedbackSettings'} exact component={FeedbackSettings}/>
+                                    <Route path={'/generalSettings'} exact component={GeneralSettings}/>
                                 </div>
                             </div>
                         </div>

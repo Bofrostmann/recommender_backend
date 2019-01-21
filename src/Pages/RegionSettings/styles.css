@@ -21,3 +21,18 @@
 .airport_buttons {
     padding: 1em;
 }
+
+.airport_container .autocomplete {
+    flex-basis: 200px;
+    flex-grow: 1;
+    max-width: 30vw;
+    flex-shrink: 0;
+}
+
+.airport_container > .col_container {
+    flex-wrap: wrap;
+}
+.airport_container {
+    flex-grow: 1;
+}
+

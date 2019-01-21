@@ -29,8 +29,10 @@ class ForeignKeyTable extends Component {
 
     };
     addObject = () => {
-        if (!this.props.object_ids.length) {
-            this.props.on_field_change({field: this.props.field_name, value: [0]});
+        var id;
+        if (typeof this.props.object_ids === "undefined" || !this.props.object_ids.length) {
+            id = 0;
+            this.props.on_field_change({field: this.props.field_name, value: [id]});
         } else {
             this.props.object_ids.sort(function (a, b) {
                 return a - b
@@ -40,9 +42,9 @@ class ForeignKeyTable extends Component {
                 field: this.props.field_name,
                 value: [...this.props.object_ids, id]
             });
-            if (typeof this.props.additional_add_object_callback !== 'undefined') {
-                this.props.additional_add_object_callback(id);
-            }
+        }
+        if (typeof this.props.additional_add_object_callback !== 'undefined') {
+            this.props.additional_add_object_callback(id);
         }
     };
 
@@ -60,7 +62,7 @@ class ForeignKeyTable extends Component {
 
     render() {
         return (
-            <div>
+            <div className={this.props.className}>
                 {this.createObjectFields()}
                 <Button bsStyle="info" onClick={this.addObject}>
                     Add {this.props.object_type_name}
@@ -76,7 +78,8 @@ ForeignKeyTable.propTypes = {
     field_name: PropTypes.string,
     on_field_change: PropTypes.func,
     object_fields_function: PropTypes.func,
-    additional_add_object_callback: PropTypes.func
+    additional_add_object_callback: PropTypes.func,
+    className: PropTypes.string
 };
 
 export default ForeignKeyTable;

@@ -32,3 +32,17 @@
 .buttons {
     margin-top: 2em;
 }
+
+input.form-control {
+    /* 3em: max number === 100; 43px: Space for feedback from bootstrap */
+    min-width: calc(3em + 43px);
+}
+
+.checkbox_container {
+    display: flex;
+    flex-direction: column;
+}
+
+.general_settings > .object_container > .value{
+    flex-grow: 1;
+}

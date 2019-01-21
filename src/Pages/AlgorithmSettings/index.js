@@ -11,6 +11,7 @@ import WithForm from '../WithForm';
 import API from '../../API';
 import ForeignKeyTable from '../../ForeignKeyTable';
 import TextInput from '../../TextInput';
+import Checkbox from "../../Checkbox";
 
 class AlgorithmSettings extends Component {
     constructor(props) {
@@ -23,6 +24,7 @@ class AlgorithmSettings extends Component {
         fields.variables = [];
         fields.key = '';
         fields.name = '';
+        fields.is_active = false;
         this.props.setFormFields(fields);
     }
 
@@ -36,6 +38,7 @@ class AlgorithmSettings extends Component {
                     fields.key = algorithms[this.props.match.params.item_key].key;
                     fields.name = algorithms[this.props.match.params.item_key].name;
                     fields.id = algorithms[this.props.match.params.item_key].id;
+                    fields.is_active = algorithms[this.props.match.params.item_key].is_active;
                     this.props.setFormSettings(this.mode, fields.name, "algorithm");
                     this.data_requester.getVariablesOfAlgorithm(fields.id)
                         .then(variables => {
@@ -81,6 +84,10 @@ class AlgorithmSettings extends Component {
         return (
             <div className={"algorithm_settings"}>
                 <div className={'use_box_shadow basic_data'}>
+                    <Checkbox value={this.props.fields.is_active}
+                              label={"Is active"}
+                              onChange={this.props.on_field_change}
+                              name={"is_active"}/>
                     <TextInput name={'key'}
                                onChange={this.props.on_field_change}
                                value={this.props.fields.key}

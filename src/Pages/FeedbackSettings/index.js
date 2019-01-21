@@ -9,9 +9,9 @@ import PropTypes from "prop-types";
 
 import TextInput from "../../TextInput";
 import WithForm from "../WithForm";
-import InputWrapper from "../../InputWrapper";
 import API from "../../API";
 import ForeignKeyTable from "../../ForeignKeyTable";
+import Checkbox from "../../Checkbox";
 
 class FeedbackSettings extends Component {
     constructor(props) {
@@ -37,19 +37,13 @@ class FeedbackSettings extends Component {
         });
     }
 
-    onCheckboxChange = event => {
-        this.props.on_field_change({field: event.target.name, value: event.target.checked})
-    };
-
     createQuestionFields = id => {
         return [
-            <InputWrapper label={"Active"} className={"is_active"} key={"question_is_active_" + id}>
-                <input name={"question_is_active_" + id}
-                       type="checkbox"
-                       checked={this.props.fields["question_is_active_" + id]}
-                       value={this.props.fields["question_is_active_" + id]}
-                       onChange={this.onCheckboxChange}/>
-            </InputWrapper>,
+            <Checkbox value={this.props.fields["question_is_active_" + id]}
+                      label={"Active"}
+                      onChange={this.props.on_field_change}
+                      name={"question_is_active_" + id}
+                      key={"question_is_active_" + id}/>,
             <TextInput value={this.props.fields["question_key_" + id]}
                        className={"key"}
                        onChange={this.props.on_field_change}
@@ -74,6 +68,7 @@ class FeedbackSettings extends Component {
 
 
     render() {
+        console.log("fbs", this.props.fields);
         return (
             <div>
                 <ForeignKeyTable field_name={"questions"}

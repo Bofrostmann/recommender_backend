@@ -22,7 +22,7 @@ export default class API {
     }
 
     getAllActivites() {
-        return axios.get(this.api_base_path + '/allFeatureData', this.config)
+        return axios.get(this.api_base_path + '/allActivities', this.config)
             .then(response => {
                 return response.data;
             });
@@ -49,8 +49,8 @@ export default class API {
             });
     }
 
-    getFeaturesOfRegion(region_id) {
-        return axios.post(this.api_base_path + '/featuresOfRegion', {region_id}, this.config).then(response => {
+    getActivitiesOfRegion(region_id) {
+        return axios.post(this.api_base_path + '/activitiesOfRegion', {region_id}, this.config).then(response => {
             return response.data;
         });
     }
@@ -115,6 +115,24 @@ export default class API {
         return axios.get(this.api_base_path + '/getFeedbackQuestions').then(response => {
             return response.data;
         });
+    }
+
+    getAllSettings() {
+        return axios.get(this.api_base_path + '/settings').then(response => {
+            return response.data;
+        });
+
+    }
+
+    getAirportAutocompleteOptions = (input) => {
+        return axios.post(this.api_base_path + '/airportAutocomplete', {query: input})
+            .then(response => {
+                response.data.result.forEach(airport => {
+                    airport.value = airport.code;
+                    airport.label = airport.name + ': ' + airport.city + ' ' + airport.country + ' (' + airport.code + ')';
+                });
+                return response.data.result;
+            })
     }
 }
 

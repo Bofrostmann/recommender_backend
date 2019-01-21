@@ -34,7 +34,7 @@ class DataOverview extends Component {
 
         this.is_hierarchical = false;
         switch (this.props.data_type) {
-            case 'feature':
+            case 'activity':
                 this.key_column = 'key';
                 this.name_column = 'label';
                 break;
@@ -79,9 +79,9 @@ class DataOverview extends Component {
 
     componentDidMount() {
         switch (this.props.data_type) {
-            case 'feature':
-                this.data_requester.getAllActivites().then(features => {
-                    this.setState({data: this.preprocessData(Object.values(features)), data_type_name: 'Feature'});
+            case 'activity':
+                this.data_requester.getAllActivites().then(activities => {
+                    this.setState({data: this.preprocessData(Object.values(activities)), data_type_name: 'activity'});
                 });
                 break;
             case 'region':

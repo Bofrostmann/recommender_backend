@@ -15,7 +15,8 @@ const Presentational = ({label, onChange, value, getValidationState, type, class
             type={type}
             value={value}
             placeholder="Enter text"
-            onChange={onChange}/>
+            onChange={onChange}
+            className={'type_' + type}/>
     </InputWrapper>
 );
 

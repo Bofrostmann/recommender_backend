@@ -14,6 +14,7 @@ import {Tabs, Tab, Button, ButtonGroup} from "react-bootstrap";
 import AirportContainer from "./AirportContainer";
 import InputWrapper from "../../InputWrapper";
 import SelectInput from "../../SelectInput";
+import ForeignKeyTable from "../../ForeignKeyTable";
 
 class RegionSettings extends Component {
     constructor(props) {
@@ -21,7 +22,8 @@ class RegionSettings extends Component {
         this.state = {
             activities: [],
             regions: [],
-            finished_loading: false
+            finished_loading: false,
+            airport: {label: '', value: ''}
         };
         this.mode = props.match.params.item_key === 'NEW' ? 'NEW' : 'UPDATE';
         this.data_requester = new API();
@@ -43,7 +45,7 @@ class RegionSettings extends Component {
 
     componentDidMount() {
         let fields = this.props.fields;
-        fields.number_of_airports = 1;
+        fields.airports = [];
         this.data_requester.getAllRegions()
             .then(regions => {
                 if (this.mode === 'UPDATE') {
@@ -58,7 +60,7 @@ class RegionSettings extends Component {
                     } else {
                         fields.max_zoom_level = 0;
                     }
-                    this.data_requester.getFeaturesOfRegion(fields.id)
+                    this.data_requester.getActivitiesOfRegion(fields.id)
                         .then(activity_values => {
                             this.data_requester.getAllActivites()
                                 .then(activities => {
@@ -78,10 +80,11 @@ class RegionSettings extends Component {
                     this.data_requester.getAirportsOfRegion(fields.id)
                         .then(airports => {
                             if (airports.length > 0) {
-                                fields.number_of_airports = airports.length;
                                 airports.forEach((airport, i) => {
+                                    fields.airports.push(i);
                                     fields['airport_name$' + i] = airport.name;
                                     fields['airport_city$' + i] = airport.city;
+                                    fields['airport_country$' + i] = airport.country;
                                     fields['airport_iata_code$' + i] = airport.iata_code;
                                 });
                             }
@@ -106,26 +109,27 @@ class RegionSettings extends Component {
             });
     }
 
-    addAirport = () => {
-        this.props.on_field_change({field: 'number_of_airports', value: this.props.fields.number_of_airports + 1});
-    };
-    removeAirport = () => {
-        this.props.on_field_change({field: 'number_of_airports', value: this.props.fields.number_of_airports - 1});
+    onAirportAutocompleteChange = (event, i) => {
+        this.props.on_field_change({field: "airport_name$" + i, value: event.value.name});
+        this.props.on_field_change({field: "airport_country$" + i, value: event.value.country});
+        this.props.on_field_change({field: "airport_city$" + i, value: event.value.city});
+        this.props.on_field_change({field: "airport_iata_code$" + i, value: event.value.code});
+
     };
 
-    createAirportFields = () => {
-        let airport_fields = [];
-        for (let i = 0; i < this.props.fields.number_of_airports; i++) {
-            airport_fields.push(
-                <AirportContainer name={this.props.fields["airport_name$" + i]}
-                                  onChange={this.props.on_field_change}
-                                  city={this.props.fields["airport_city$" + i]}
-                                  iata_code={this.props.fields["airport_iata_code$" + i]}
-                                  id={i}
-                                  key={i}/>
-            );
-        }
-        return airport_fields;
+    createAirportFields = (i) => {
+        return (
+            <AirportContainer name={this.props.fields["airport_name$" + i]}
+                              airport={this.state.airport}
+                              onChange={event => {
+                                  this.onAirportAutocompleteChange(event, i)
+                              }}
+                              city={this.props.fields["airport_city$" + i]}
+                              country={this.props.fields["airport_country$" + i]}
+                              code={this.props.fields["airport_iata_code$" + i]}
+                              id={i}
+                              key={i}/>
+        );
     };
 
     getRegionOptions = () => {
@@ -193,15 +197,13 @@ class RegionSettings extends Component {
                         </div>
                     </Tab>
                     <Tab eventKey={3} title={"Airports"}>
-                        {this.createAirportFields()}
-                        <ButtonGroup className={"airport_buttons"}>
-                            <Button bsStyle="info" onClick={this.addAirport}>
-                                Add Airport
-                            </Button>
-                            <Button bsStyle="warning" onClick={this.removeAirport}>
-                                Remove Airport
-                            </Button>
-                        </ButtonGroup>
+                        <ForeignKeyTable field_name={"airports"}
+                                         object_ids={this.props.fields["airports"]}
+                                         object_type_name={"airport"}
+                                         on_field_change={this.props.on_field_change}
+                                         object_fields_function={this.createAirportFields}/>
+
+
                     </Tab>
 
                 </Tabs>
@@ -217,14 +219,14 @@ RegionSettings.propTypes = {
     setFormSettings: PropTypes.func,
     setFormFields: PropTypes.func,
     fields: PropTypes.shape({
-        feature_key: PropTypes.string,
+        activity_key: PropTypes.string,
         label: PropTypes.string,
         id: PropTypes.number
     })
 };
 
 RegionSettings.defaultProps = {
-    fields: {feature_key: '', label: '', id: -1}
+    fields: {activity_key: '', label: '', id: -1}
 };
 
 export default WithForm(RegionSettings, 'region');
