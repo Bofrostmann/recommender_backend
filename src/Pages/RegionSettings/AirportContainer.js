@@ -4,7 +4,6 @@
 
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
-import TextInput from "../../TextInput";
 import "./styles.css"
 import AsyncSelectInput from "../../AsyncSelectInput"
 import API from "../../API";

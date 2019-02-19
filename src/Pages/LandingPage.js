@@ -68,7 +68,7 @@ class LandingPage extends Component {
             <AuthenticationConsumer>
                 {({is_authenticated, login}) => (
                     <form onSubmit={event => this.submitForm(event, login)}>
-                        <h1>Welcome to the region Recommender Backend!</h1>
+                        <h1>Welcome to the DestiRec admin tool!</h1>
                         {is_authenticated
                             ? ""
                             : (

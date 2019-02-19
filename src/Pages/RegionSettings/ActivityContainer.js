@@ -17,19 +17,13 @@ const ActivityContainer = ({label, activity_key, quality_spring, quality_summer,
                 [
                     {label: 'Summer', name_suffix: 'summer'},
                     {label: 'Autumn', name_suffix: 'autumn'},
-                    {label: 'Winter', name_suffix: 'winter'}
+                    {label: 'Winter', name_suffix: 'winter'},
+                    {label: 'Spring', name_suffix: 'spring'}
                 ].map(field => {
                     return (<TextInput label={field.label} onChange={onChange} value={quality_spring}
                                name={activity_key + "$" + field.name_suffix}/>)
                 })
             }
-
-            <TextInput label={"summer"} onChange={onChange} type={"number"} value={quality_summer}
-                       name={activity_key + "$summer"}/>
-            <TextInput label={"autumn"} onChange={onChange} type={"number"} value={quality_autumn}
-                       name={activity_key + "$autumn"}/>
-            <TextInput label={"winter"} onChange={onChange} type={"number"} value={quality_winter}
-                       name={activity_key + "$winter"}/>
         </div>
     </div>
 );

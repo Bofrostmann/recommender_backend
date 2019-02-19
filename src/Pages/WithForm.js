@@ -39,7 +39,6 @@ function WithForm(FormContent, item_type_key) {
             const api = new API();
             let submit_promise;
             if (this.mode === 'NEW') {
-                console.log("fields", this.state.fields);
                 submit_promise = api.insertData(this.item_type_key, this.state.fields);
             } else {
                 submit_promise = api.updateData(this.item_type_key, this.state.fields);

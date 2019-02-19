@@ -29,7 +29,7 @@ Checkbox.propTypes = {
     label: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func,
-    value: PropTypes.number
+    value: PropTypes.bool
 };
 
 Checkbox.defaultProps = {};

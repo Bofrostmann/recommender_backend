@@ -68,7 +68,6 @@ class FeedbackSettings extends Component {
 
 
     render() {
-        console.log("fbs", this.props.fields);
         return (
             <div>
                 <ForeignKeyTable field_name={"questions"}

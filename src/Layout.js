@@ -30,10 +30,9 @@ class Layout extends Component {
                 {({is_authenticated, login, logout}) => (
                     <BrowserRouter basename={"/backend"}>
                         <div>
-                            {console.log("render", this)}
                             <div className={"header"}>
                                 <div className={"title"}>
-                                    Travel region recommender BACKEND
+                                    DestiRec administration tool
                                 </div>
                                 <Button onClick={
                                     is_authenticated
@@ -44,7 +43,7 @@ class Layout extends Component {
                             </div>
                             <div className={"layout"}>
                                 <div className={"nav"}>
-                                    <h3>Navigation TODO!</h3>
+                                    <h3>Navigation</h3>
                                     <ul>
                                         <li><Link to='/'>Home</Link></li>
                                         {is_authenticated

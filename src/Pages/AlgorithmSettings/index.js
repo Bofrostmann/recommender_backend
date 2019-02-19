@@ -33,8 +33,6 @@ class AlgorithmSettings extends Component {
             const fields = this.props.fields;
             this.data_requester.getAllAlgorithms()
                 .then(algorithms => {
-                    console.log(this);
-                    console.log("algos", algorithms);
                     fields.key = algorithms[this.props.match.params.item_key].key;
                     fields.name = algorithms[this.props.match.params.item_key].name;
                     fields.id = algorithms[this.props.match.params.item_key].id;
@@ -42,13 +40,11 @@ class AlgorithmSettings extends Component {
                     this.props.setFormSettings(this.mode, fields.name, "algorithm");
                     this.data_requester.getVariablesOfAlgorithm(fields.id)
                         .then(variables => {
-                            console.log("variables", variables);
                             variables.forEach((variable, i) => {
                                 fields['variable_key$' + i] = variable.key;
                                 fields['variable_value$' + i] = variable.value;
                                 fields.variables.push(i);
                             });
-                            console.log("fields", fields);
                             this.props.setFormFields(fields);
                         })
                 });
