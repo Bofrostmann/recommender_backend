@@ -1,4 +1,20 @@
-# This is the DestiRec Admin-Tool.
+# This is the DestiRec - Admin Tool
+First, we will start with a small setup-manual. below, you can also find the default Create React App readme.
+
+These are just some basic steps to get the DestiRec - Frontend running on an Ubuntu Server. You also have to take care of setting up the [API](https://github.com/Bofrostmann/region_recommender_api) and installing npm, node and apache2. 
+
+In general, this is not an exact manual, but it should get you in the right direction.
+
+1. Create the CONSTANTS.js template using `node src/setup.js`
+2. Fill the created .CONSTANTS.js file
+    - `"http://XXX.XXX.XX.XX/recommenderAPI"` (XXX.XXX.XX.XX represents the IP of your API server)
+3. in package.json, insert before dependencies:
+		`"homepage": "http://vmott23.in.tum.de/backend/",` (The url has to match the url your frontend will be hostet at)  
+4. `npm install`
+5. `npm run build`
+6. `cp -a build/. /var/www/html/backend` (if this is where your Apache server should find the index file)
+
+# Create React APP readme
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
